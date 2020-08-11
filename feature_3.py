@@ -1,42 +1,73 @@
-import cv2
-import numpy as np
+#Create a circle around the nucleus and walk through all the rays coming from the center, looking for the cell wall
+#Xu_Yang 2020.8.11
 
-ball_color = 'cell_wall'
-
-color_dist = {'red': {'Lower': np.array([0, 60, 60]), 'Upper': np.array([6, 255, 255])},
-              'blue': {'Lower': np.array([100, 80, 46]), 'Upper': np.array([124, 255, 255])},
-              'cell_halo': {'Lower': np.array([215, 210, 220]), 'Upper': np.array([235, 225, 235])},
-              'cell_wall': {'Lower': np.array([205, 170, 200]), 'Upper': np.array([210, 185, 210])},
-
-              }
+import math_test
+import cv2 as cv
+from math_test import *
+from pylab import *
+from pixelbetweenpoints import pixel_between_two_points
 
 
-#frame=cv2.imread("G:\\2020summer\Project\output_test\\1.jpg")
-frame=cv2.imread("G:\\2020summer\\Project\\Chromophobe_dataset1\\1.jpg")
-frame_2=frame.copy()
-img4=cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+img=cv.imread("G:\\2020summer\\Project\\Cell_classfication_1.0.0\\temp_1.jpg")
+#img=cv.cvtColor(img,cv.COLOR_BGR2BGRA)
 
-gs_frame = cv2.GaussianBlur(frame, (5, 5), 0)                     # 高斯模糊
-#hsv = cv2.cvtColor(gs_frame, cv2.COLOR_BGR2HSV)                 # 转化成HSV图像
-erode_hsv = cv2.erode(gs_frame, None, iterations=2)                   # 腐蚀 粗的变细
-inRange_hsv = cv2.inRange(erode_hsv, color_dist[ball_color]['Lower'], color_dist[ball_color]['Upper'])
+cv.imshow("img", img)
+#-----preprocess-----
+gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+#cv.imshow("gray", gray)
 
-mask = cv2.inRange(gs_frame,  color_dist[ball_color]['Lower'], color_dist[ball_color]['Upper'])
-cv2.imshow('Mask', mask)
+gauss = cv.GaussianBlur(gray, (5, 5), 5)
 
-cnts, hierarchy = cv2.findContours(mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-print("total cells number : ", len(cnts))
-for i in range(0, len(cnts)):
-    cv2.drawContours(frame_2, [cnts[i]], -1, (0, 0, 0),-1)
+#cv.imshow("gauss1",gauss)
+#print("gauss_test: ",gauss[361][616])
+'''
+x_sample = :  616
+y_sample = :  361
+'''
+img_shape=gauss.shape
+print(img_shape[0],img_shape[1])
+x_sample = 50
+y_sample = 60
+angle_temp_list=angle_round(x_sample,y_sample,35)#第三个参数为圆的半径
+contour_cell=[]
 
-c = max(cnts, key=cv2.contourArea)
-rect = cv2.minAreaRect(c)
-box = cv2.boxPoints(rect)
-cv2.drawContours(frame, [np.int0(box)], -1, (0, 255, 255), 2)
+for i in range(1,73):
+    x1=angle_temp_list[i-1][0]
+    y1 = angle_temp_list[i - 1][1]
+    cx=x_sample
+    cy=y_sample
+    temp_list=pixel_between_two_points(cx,round(x1),cy,round(y1))
 
-cv2.imshow('frame_2', frame_2)
-cv2.waitKey(1)
+    ray_lenth = 0
+    compare_distance_value=0
+    compare_color_value=255
+    color_hist=[]
+
+    for m in range(0,len(temp_list)):
+        x_temp=temp_list[m][0]
+        y_temp=temp_list[m][1]
 
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+
+        single_lenth=cell_wall_ray_lenth(cx,cy,x_temp,y_temp)
+        if gauss[y_temp][x_temp] <= compare_color_value:
+            compare_color_value =gauss[y_temp][x_temp]
+            compare_distance_valuevalue=single_lenth
+
+            x_final=x_temp
+            y_final=y_temp
+        else:
+            pass
+        #==hist graph
+        color_hist.append(gauss[y_temp][x_temp])
+    #plt.plot(color_hist, color="black")
+    #plt.show()
+    cv.circle(img, (round(x_final), round(y_final)), 3, (0, 0, 255), -1)
+
+    #cv.circle(img, (round(x1), round(y1)), 3, (0, 0, 255), -1) #半径显示
+cv.imshow("img_test_round", img)
+
+
+
+
+cv.waitKey()
