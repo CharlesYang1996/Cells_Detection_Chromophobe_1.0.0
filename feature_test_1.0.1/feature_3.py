@@ -93,7 +93,16 @@ def step2(cell_id):
             #distance test and upload
             distance_from_single_point_to_center_list.append(distance(x_final,y_final,cx,cy))
         #<data_clean
+        plt.plot(distance_from_single_point_to_center_list, color="black")
+        font1 = {
+                 'weight': 'normal',
+                 'size': 20,
+                 }
 
+        plt.tick_params(labelsize=15)
+        plt.xlabel('Number of Points', font1)
+        plt.ylabel('Distance to Center', font1)
+        plt.show()
         # data_clean>
         #< list save
         file = open('test_list.txt', 'w')
@@ -103,7 +112,7 @@ def step2(cell_id):
         file.close()
         #list save >
 
-        from k_means_1D import k_means_1d_def
+        #from k_means_1D import k_means_1d_def
         #temp_list_1=k_means_1d_def(3,30)[2]
         #plt.plot([temp_list_1[0]]*len(a), color="red", linestyle='--')
         #plt.plot([temp_list_1[1]] * len(a), color="red", linestyle='--')
@@ -112,9 +121,9 @@ def step2(cell_id):
 
 
 
-    #cv.imshow("img_test_round", img)
+    cv.imshow("img_test_round", img)
     cv.imwrite("G:\\2020summer\\Project\\Cell_classfication_1.0.0\\step2_output.bmp",img)
 
 
     print("============Step 2 End / Dataset Saved============")
-    cv.waitKey()
+    #cv.waitKey()
