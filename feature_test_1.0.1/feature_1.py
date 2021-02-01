@@ -39,7 +39,7 @@ def step1():
     #cv.imshow("gauss1",gauss)
 
     ret, thresh = cv.threshold(gauss, 190, 255, 0)
-    cv.imwrite("G:\\2020summer\\Project\\Chromophobe_dataset1\\figure3_left.jpg",thresh)
+    cv.imwrite("temp_file\\figure3_left.jpg",thresh)
     #cv.imshow("thresh",thresh)
 
     erode = cv.erode(thresh, None, iterations=1)
@@ -142,10 +142,10 @@ def step1():
                 location_cells_center[counter_number]=[cX,cY]
             except:
                 pass
-            if counter_number==76:
+            if counter_number==1:
                 x1=cX
                 y1=cY
-            if counter_number==68:
+            if counter_number==2:
                 x2=cX
                 y2=cY
             if counter_number==20:
@@ -222,9 +222,13 @@ def step1():
     image_size_text="Image size: [Width :"+str(img_original.shape[0])+"]"+"[Height :"+str(img_original.shape[1])+"]"
     cv.putText(img_masked, image_size_text, (80, img.shape[0]-400), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
     cv.putText(img_masked, "Total cells number: "+str(counter_number), (80, img.shape[0]-350), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
+    Cells_density=('%.2f'%(10000*counter_number/(img.shape[0]*img.shape[1])))
+    print("Cells density : ",Cells_density," / 100*100 pixels")
+    cv.putText(img_masked, "Cells density : " + str(Cells_density)+" / 100*100 pixels", (80, img.shape[0] - 300),cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 0), 2)
     cv.putText(img_masked, "Close window to continue", (80, img.shape[0]-250), cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 1)
     #=================================/UI
     cv.imshow('img_copy', img_masked)
+    cv.imwrite("result\\overview_result1.bmp", img_masked)
     print("============Step 1 End============")
     cv.waitKey()
     return counter_number

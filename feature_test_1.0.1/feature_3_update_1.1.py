@@ -95,7 +95,7 @@ def step2(cell_id):
             result_dot_location_x_y.append([x_final,y_final])
 
         #<grouping
-        print(result_dot_location_x_y)
+        #print(result_dot_location_x_y)
         result_grouping=[[]]
         for i in range(0,72-1):
             p1_x=result_dot_location_x_y[i][0]
@@ -107,11 +107,11 @@ def step2(cell_id):
             else:
                 result_grouping.append([])
                 result_grouping[-1].append(i)
-        print(result_grouping)
+        #print(result_grouping)
 
         res=result_grouping.index(max(result_grouping))
-        print(res)
-        print(result_grouping[res])
+        #print(res)
+        #print(result_grouping[res])
         # grouping>
 
         # <loop for recorrect
@@ -183,4 +183,3 @@ def step2(cell_id):
 
     print("============Step 2 End / Dataset Saved============")
     cv.waitKey()
-step2(27)

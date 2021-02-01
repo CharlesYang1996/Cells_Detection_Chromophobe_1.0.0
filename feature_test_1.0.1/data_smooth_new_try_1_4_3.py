@@ -97,23 +97,7 @@ def step3(cell_id):
         #test_mode
 
 
-        #plt.title("Smoothed_Data",size=15)
-        '''     
-        standard_circle_list = [round(np.mean(y), 1)] * len(dataset)
-        plt.plot(t, y, "b.-", t, y_av, "r.-")
-        plt.plot(t, standard_circle_list, "y.-")
-        plt.legend(['original data', 'smooth data','standard circle'])
 
-        font1 = {
-                 'weight': 'normal',
-                 'size': 20,
-                 }
-
-        plt.tick_params(labelsize=15)
-        plt.xlabel('Number of Points', font1)
-        plt.ylabel('Distance to Center', font1)
-        plt.show()
-        '''
 
         new_list=y_av
 
@@ -128,4 +112,3 @@ def step3(cell_id):
         file.write(str(fp))
         file.write('\n')
     file.close()
-
